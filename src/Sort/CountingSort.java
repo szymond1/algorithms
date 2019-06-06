@@ -9,7 +9,7 @@ public class CountingSort {
      * Sortowanie liczb calkowitych metoda zliczeniowaa(counting sort)
      */
 
-    private static Integer[] tabA = new Integer[]{4, 1, 5, 0, 1, 6, 5, 1, 5, 3};
+    private static Integer[] tabA = new Integer[]{4, 1, 5, 0, 1, 6, 5, 1, 5, 3, 8};
 
     public static void main(String[] args) {
         int i;
@@ -20,20 +20,21 @@ public class CountingSort {
 
         int max = findMax(tabA);
 
-        countingSort(max);
+        Integer[] tabB = countingSort(max);
 
         System.out.println("\nZbior po sortowaniu:");
-        for (i=0; i<tabA.length; i++)
-            System.out.print(tabA[i] + " ");
+        for (i=0; i<tabB.length; i++)
+            System.out.print(tabB[i] + " ");
 
     }
 
     /* Procedura sortowania tab[pocz...kon] */
-    private static void countingSort(int max)
+    private static Integer[] countingSort(int max)
     {
         Integer[] equalKeys = countEqualKeys(max +1);
         Integer[] lowerKeys = countLowerKeys(equalKeys, max+1);
         Integer[] tabB = reOrganize(lowerKeys, max +1);
+        return tabB;
     }
 
     /* Sortowanie przez zliczanie częśc główna*/
@@ -42,15 +43,17 @@ public class CountingSort {
         int i,j,key,index;
         Integer[] nextTab = new Integer[max];
         Integer[] tabB = new Integer[tabA.length];
-       for (j = 0; j < max +1; j++)
-       {
+       for (j = 0; j < max ; j++) {
            nextTab[j] = lowerKeys[j] + 1;
+       }
            for (i = 0; i < tabA.length; i++)
            {
               key = tabA[i];
               index = nextTab[key];
+              tabB[index-1] = tabA[i];
+              nextTab[key]++;
            }
-       }
+        return tabB;
     }
 
     /* Tworzenie tablicy, która zbiera informacje o ilości równych kluczy */
@@ -72,7 +75,7 @@ public class CountingSort {
     {
         Integer[] lowerTab = new Integer[max];
         Arrays.fill(lowerTab, 0);
-        for (int i = 1; i < max +1; i++)
+        for (int i = 1; i < max ; i++)
         {
             lowerTab[i] = lowerTab[i-1] + equalKeys[i-1];
         }
